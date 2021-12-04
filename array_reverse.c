@@ -1,56 +1,75 @@
 #include <stdio.h>
 #define N 10
 
-void print_array(int A[])
-{
-    for(int i = 0; i < N; ++i)
+void print_array(int* A, int size_a) {
+    for(int i = 0; i < size_a; ++i) {
         printf(" %d ", A[i]);
+    }
     printf("\n");
 }
 
-int main() {
-
-    FILE *f;
-    int i_tmp = 0;
-    int A[N];
-    int temp;
-    
-    
-    f = fopen ("file.txt", "r");  // находим кол-во ненулевых элементов
-    for (int i = 0; i < N; i++) {
-        int a;
-        a = fscanf (f, "%d", &A[i]);
-        if (a < 0) {
-            temp = i;  // сохраняем номер первого "пустого" элемента в переменную temp
-            break;
-        }
+void read (int* A, FILE* f, int size_a) {
+    for (int i = 0; i < size_a; i++) {
+        fscanf (f, "%d", &A[i]);
     }
-    fclose(f);
-    
-    f = fopen ("file.txt", "r");  // Чтение чисел из файла в массив B
-        for (int i = 0; i < N; i++) {
-            if (i_tmp == temp) {
-                fseek (f, 0, SEEK_SET); // Сдвигаем указатель в начало файла каждые tmp итераций
-                i_tmp = 0;              // Обнуляем счетчик
-            }
-            fscanf (f, "%d", &A[i]);
-            i_tmp++;
-        }
-    fclose(f);
-    
+}
+
+void left_shift(int* A, int size_a) {
     int tmp;
-
     tmp = A[0];  // Cycle shift to the left
-    for(int i = 0; i < N-1; ++i)
+    for(int i = 0; i < size_a-1; ++i)
         A[i] = A[i+1];
-    A[N-1] = tmp;
-    print_array(A);
+    A[size_a-1] = tmp;
 
+
+}
+
+void right_shift(int* A, int size_a) {
+    int tmp;
     tmp = A[N-1];  // Cycle shift to the right
     for(int i = N-1; i > 0; --i)
         A[i] = A[i-1];
     A[0] = tmp;
-    print_array(A);
+}
 
-    return 0;
+void main(void) {
+
+    FILE *f;
+    int size_a = N;
+    int A[size_a];
+    int flag = 0;
+    int number = 0;
+
+    printf("What kind of array shift do you want to do?");
+    printf("1 - Array shift to the left");
+    printf("2 - Array shift to the right");
+    scanf("%d", &flag);
+
+    printf("How many numbers do you want to shift?");
+    scanf("%d", &number);
+
+    if (flag == 1) {
+        for(int i = 0; i < number; i++) {
+            left_shift(A, size_a);
+        }
+    }
+
+    else {
+
+        for(int i = 0; i < number; i++) {
+        right_shift(A, size_a);
+    }
+
+
+    }
+
+
+    f = fopen ("file.txt", "r");  // Чтение чисел из файла в массив B
+    read(A, f, size_a);
+    fclose(f);
+
+
+
+
+    print_array(A, size_a);
 }
