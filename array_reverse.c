@@ -39,6 +39,9 @@ void main(void) {
     int flag = 0;
     int number = 0;
     int again = 1;
+    f = fopen ("file.txt", "r");  // Чтение чисел из файла в массив B
+    read(A, f, size_a);
+    fclose(f);
     while (again == 1) {
         printf("What kind of array shift do you want to do?\n");
         printf("1 - Array shift to the left\n");
@@ -46,9 +49,6 @@ void main(void) {
         scanf("%d", &flag);
         printf("How many numbers do you want to shift?\n");
         scanf("%d", &number);
-        f = fopen ("file.txt", "r");  // Чтение чисел из файла в массив B
-        read(A, f, size_a);
-        fclose(f);
         if (flag == 1) {
             for(int i = 0; i < number; i++) {
                 left_shift(A, size_a);
@@ -57,6 +57,7 @@ void main(void) {
         else {
             for(int i = 0; i < number; i++) {
                 right_shift(A, size_a);
+
             }
         }
         print_array(A, size_a);
